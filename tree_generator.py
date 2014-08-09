@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import math
+import time
 
 PHI = (1 + math.sqrt(5)) / 2
 
@@ -12,7 +13,7 @@ class Tree(object):
         self.right_branch = None
         self.left_branch = None
         self.gen_order = gen_order
-        self.generate_next_generation()
+        self._generate_next_generation()
 
 
     def __str__(self):
@@ -31,7 +32,7 @@ class Tree(object):
 
     def _gen_right_branch(self):
         r_len = self.length
-        r_slope = 0
+        r_slope = self.slope + math.tan(120)
         r_root_point = self.end_point
         r_gen_order = self.gen_order - 1
         self.right_branch = Tree(r_len, r_slope, r_root_point, r_gen_order)
@@ -39,10 +40,16 @@ class Tree(object):
 
     def _gen_left_branch(self):
         l_len = self.length / PHI
-        l_slope = 0
+        l_slope = self.slope - math.tan(36)
         l_root_point = self.end_point
         l_gen_order = self.gen_order - 1
         self.left_branch = Tree(l_len, l_slope, l_root_point, l_gen_order)
+
+
+    def _generate_next_generation(self):
+        if self.gen_order != 0:
+            self._gen_left_branch()
+            self._gen_right_branch()
 
 
     def walk(self):
@@ -53,13 +60,6 @@ class Tree(object):
             for branch in self.left_branch.walk():
                 yield branch
         yield self
-
-
-    def generate_next_generation(self):
-        if self.gen_order != 0:
-            self._gen_left_branch()
-            self._gen_right_branch()
-
 
 
 def gimp_run(*args):
@@ -83,7 +83,8 @@ def gimp_run(*args):
         e_x, e_y = b.end_point
         ctrl_points = [s_x, s_y, e_x, e_y]
         pdb.gimp_paintbrush_default(drw, len(ctrl_points), ctrl_points)
-    gimp.displays_flush()
+        gimp.displays_flush()
+        time.sleep(1)
 
 
 ################################################################################
