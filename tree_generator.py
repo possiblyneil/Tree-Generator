@@ -58,7 +58,7 @@ def gimp_run(*args):
     height = 1000
     width = 1000
     root_point = (int(math.floor(height/3)), int(math.floor(width/2)))
-    tree = gen_tree(gen_order, length, root_point)
+    tree = golden_tree(length, 0, root_point, gen_order)
     img = gimp.Image(height, width, RGB)
     layer = gimp.Layer(img, 'Layer 1', height, width, RGB_IMAGE, 100, NORMAL_MODE)
     img.add_layer(layer, 0)
@@ -67,9 +67,7 @@ def gimp_run(*args):
     gimp.displays_flush()
     gimp.set_foreground(0, 0, 0) 
     drw = pdb.gimp_image_active_drawable(img)
-    all_branches = tree.get_all_branches()
-    pdb.gimp_message('The list of branches is: {0}'.format(*all_branches))
-    for b in all_branches:
+    for b in tree.walk():
         s_x, s_y = b.root_point
         e_x, e_y = b.end_point
         ctrl_points = [s_x, s_y, e_x, e_y]
