@@ -3,7 +3,7 @@ import math
 
 PHI = (1 + math.sqrt(5)) / 2
 
-class golden_tree(object):
+class Tree(object):
     def __init__(self, length, slope, root_point, gen_order):
         self.length = length
         self.slope = slope
@@ -25,7 +25,7 @@ class golden_tree(object):
         r_slope = 0
         r_root_point = self.end_point
         r_gen_order = self.gen_order - 1
-        self.right_branch = golden_tree(r_len, r_slope, r_root_point, r_gen_order)
+        self.right_branch = Tree(r_len, r_slope, r_root_point, r_gen_order)
 
 
     def _gen_left_branch(self):
@@ -33,7 +33,7 @@ class golden_tree(object):
         l_slope = 0
         l_root_point = self.end_point
         l_gen_order = self.gen_order - 1
-        self.left_branch = golden_tree(l_len, l_slope, l_root_point, l_gen_order)
+        self.left_branch = Tree(l_len, l_slope, l_root_point, l_gen_order)
 
 
     def walk(self):
@@ -60,7 +60,7 @@ def gimp_run(*args):
     height = 1000
     width = 1000
     root_point = (int(math.floor(height/3)), int(math.floor(width/2)))
-    tree = golden_tree(length, 0, root_point, gen_order)
+    tree = Tree(length, 0, root_point, gen_order)
     img = gimp.Image(height, width, RGB)
     layer = gimp.Layer(img, 'Layer 1', height, width, RGB_IMAGE, 100, NORMAL_MODE)
     img.add_layer(layer, 0)
@@ -84,7 +84,7 @@ def gimp_run(*args):
 try:
     from gimpfu import *
     register(
-        "golden_tree_gen", "", "", "", "", "",
+        "Tree_gen", "", "", "", "", "",
         "<Toolbox>/Xtns/Languages/Python-Fu/_Golden Tree Generator", "",
         [
             (PF_INT,    "arg0", "The number of generations deep the tree will be", 4),
@@ -101,6 +101,6 @@ except ImportError:
         length = 30
         root_point = (333, 500)
         slope = 0
-        tree = golden_tree(length, slope, root_point, gen_order)
+        tree = Tree(length, slope, root_point, gen_order)
         for branch in tree.walk():
             print(branch)
