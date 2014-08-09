@@ -8,7 +8,7 @@ class Tree(object):
         self.length = length
         self.slope = slope
         self.root_point = root_point
-        self.end_point = (0, 0)
+        self.end_point = self._get_end_point()
         self.right_branch = None
         self.left_branch = None
         self.gen_order = gen_order
@@ -18,6 +18,15 @@ class Tree(object):
     def __str__(self):
         return "Root point {0}, End point {1}, Length {2}".format(
              self.root_point, self.end_point, self.length) 
+
+
+    def _get_end_point(self):
+        # This is mostly black magic taken from the math stack exchange..
+        # no I don't have shame nor will I show my work.
+        s_x, s_y = self.root_point
+        e_x = - (self.length * (1 / math.sqrt(1 + (self.slope * self.slope)))) + s_x
+        e_y = - (self.length * (self.slope / math.sqrt(1 + (self.slope * self.slope)))) + s_y
+        return (e_x, e_y)
 
 
     def _gen_right_branch(self):
