@@ -38,11 +38,11 @@ class golden_tree(object):
 
     def walk(self):
         if self.right_branch != None:
-            print "Right walk getting called"
-            self.right_branch.walk()
+            for branch in self.right_branch.walk():
+                yield branch
         if self.left_branch != None:
-            print "Left walk getting called"
-            self.left_branch.walk()
+            for branch in self.left_branch.walk():
+                yield branch
         yield self
 
 
@@ -55,6 +55,8 @@ class golden_tree(object):
 
 def gimp_run(*args):
     gen_order, length = args
+    #TODO: These are stub values, they really should be taken from either a user
+    # dialogue or from the active layer if ther is one
     height = 1000
     width = 1000
     root_point = (int(math.floor(height/3)), int(math.floor(width/2)))
